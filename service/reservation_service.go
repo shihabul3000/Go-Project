@@ -27,6 +27,10 @@ func NewReservationService(reservations repository.ReservationRepository) Reserv
 
 func (s *reservationService) CreateReservation(ctx context.Context, userID uint, req dto.CreateReservationRequest) (*dto.ReservationResponse, error) {
 	licensePlate := strings.ToUpper(strings.TrimSpace(req.LicensePlate))
+	if licensePlate == "" {
+		return nil, &apperrors.ValidationError{Fields: map[string]string{"license_plate": "is required"}}
+	}
+
 	reservation, err := s.reservations.CreateWithCapacityLock(ctx, userID, req.ZoneID, licensePlate)
 	if err != nil {
 		return nil, err
