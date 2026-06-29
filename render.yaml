@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: spotsync-api
+    env: go
+    plan: free
+    buildCommand: go build -o bin/spotsync-api .
+    startCommand: ./bin/spotsync-api
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: BCRYPT_COST
+        value: 12
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: DB_MAX_OPEN_CONNS
+        value: 25
+      - key: DB_MAX_IDLE_CONNS
+        value: 10
+      - key: DB_CONN_MAX_LIFETIME
+        value: 30m
