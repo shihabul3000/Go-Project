@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+
+bin/
+dist/
+tmp/
+.air.toml
+
+*.exe
+*.test
+coverage.out
+
+.DS_Store
+Thumbs.db
