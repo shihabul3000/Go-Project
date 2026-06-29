@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 
 	"github.com/shihabul3000/Go-Project/apperrors"
 	"github.com/shihabul3000/Go-Project/dto"
@@ -27,8 +28,8 @@ func NewZoneService(zones repository.ZoneRepository) ZoneService {
 
 func (s *zoneService) CreateZone(ctx context.Context, req dto.CreateZoneRequest) (*dto.ParkingZoneResponse, error) {
 	zone := &models.ParkingZone{
-		Name:          req.Name,
-		Type:          req.Type,
+		Name:          strings.TrimSpace(req.Name),
+		Type:          strings.TrimSpace(req.Type),
 		TotalCapacity: req.TotalCapacity,
 		PricePerHour:  req.PricePerHour,
 	}
@@ -91,10 +92,10 @@ func (s *zoneService) UpdateZone(ctx context.Context, id uint, req dto.UpdateZon
 		zone.TotalCapacity = *req.TotalCapacity
 	}
 	if req.Name != nil {
-		zone.Name = *req.Name
+		zone.Name = strings.TrimSpace(*req.Name)
 	}
 	if req.Type != nil {
-		zone.Type = *req.Type
+		zone.Type = strings.TrimSpace(*req.Type)
 	}
 	if req.PricePerHour != nil {
 		zone.PricePerHour = *req.PricePerHour
