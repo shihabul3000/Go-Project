@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
@@ -81,6 +83,33 @@ func main() {
 
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
+	})
+
+	e.GET("/ready", func(c echo.Context) error {
+		sqlDB, err := db.DB()
+		if err != nil {
+			return c.JSON(http.StatusServiceUnavailable, dto.APIResponse{
+				Success: false,
+				Message: "Database connection is not ready",
+				Errors:  "database handle unavailable",
+			})
+		}
+
+		ctx, cancel := context.WithTimeout(c.Request().Context(), 2*time.Second)
+		defer cancel()
+		if err := sqlDB.PingContext(ctx); err != nil {
+			return c.JSON(http.StatusServiceUnavailable, dto.APIResponse{
+				Success: false,
+				Message: "Database connection is not ready",
+				Errors:  "database ping failed",
+			})
+		}
+
+		return c.JSON(http.StatusOK, dto.APIResponse{
+			Success: true,
+			Message: "SpotSync API is ready",
+			Data:    map[string]string{"database": "ok"},
+		})
 	})
 
 	routes.Register(e, authHandler, zoneHandler, reservationHandler, cfg.JWTSecret)
