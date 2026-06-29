@@ -45,6 +45,7 @@ func main() {
 
 	e.Use(echoMiddleware.Recover())
 	e.Use(echoMiddleware.RequestID())
+	e.Use(echoMiddleware.Secure())
 	e.Use(echoMiddleware.Logger())
 	e.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: cfg.AllowedOrigins,
