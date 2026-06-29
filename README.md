@@ -64,6 +64,13 @@ curl http://localhost:8080/health
 curl https://your-vercel-project.vercel.app/health
 ```
 
+Readiness check with database ping:
+
+```bash
+curl http://localhost:8080/ready
+curl https://your-deployed-api.example.com/ready
+```
+
 ## Environment Variables
 
 | Variable | Required | Example |
@@ -107,6 +114,14 @@ Errors follow:
 | --- | --- | --- | --- |
 | `POST` | `/api/v1/auth/register` | Public | Register a driver or admin |
 | `POST` | `/api/v1/auth/login` | Public | Login and receive a JWT |
+
+### Health
+
+| Method | Path | Access | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/` | Public | Show API landing metadata |
+| `GET` | `/health` | Public | Confirm the HTTP server is alive |
+| `GET` | `/ready` | Public | Confirm the API can reach the database |
 
 Register request:
 
