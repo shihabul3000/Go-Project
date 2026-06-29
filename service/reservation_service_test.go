@@ -91,6 +91,24 @@ func TestReservationServiceCreateNormalizesLicensePlate(t *testing.T) {
 	}
 }
 
+func TestReservationServiceCreateRejectsBlankLicensePlate(t *testing.T) {
+	repo := newFakeReservationRepository()
+	service := NewReservationService(repo)
+
+	_, err := service.CreateReservation(context.Background(), 7, dto.CreateReservationRequest{
+		ZoneID:       2,
+		LicensePlate: "   ",
+	})
+
+	var validationErr *apperrors.ValidationError
+	if !errors.As(err, &validationErr) {
+		t.Fatalf("expected validation error, got %v", err)
+	}
+	if validationErr.Fields["license_plate"] != "is required" {
+		t.Fatalf("unexpected license plate validation message: %q", validationErr.Fields["license_plate"])
+	}
+}
+
 func TestReservationServicePreservesZoneFullConflict(t *testing.T) {
 	repo := newFakeReservationRepository()
 	repo.createErr = apperrors.ErrZoneFull
