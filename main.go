@@ -8,6 +8,7 @@ import (
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 	"github.com/shihabul3000/Go-Project/config"
 	"github.com/shihabul3000/Go-Project/database"
+	"github.com/shihabul3000/Go-Project/dto"
 	"github.com/shihabul3000/Go-Project/handler"
 	"github.com/shihabul3000/Go-Project/repository"
 	"github.com/shihabul3000/Go-Project/routes"
@@ -60,6 +61,20 @@ func main() {
 			echo.HeaderAuthorization,
 		},
 	}))
+
+	e.GET("/", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, dto.APIResponse{
+			Success: true,
+			Message: "SpotSync API is live",
+			Data: map[string]interface{}{
+				"health":        "/health",
+				"api_base":      "/api/v1",
+				"auth":          "/api/v1/auth/register",
+				"parking_zones": "/api/v1/zones",
+				"reservations":  "/api/v1/reservations",
+			},
+		})
+	})
 
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})

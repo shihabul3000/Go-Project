@@ -55,12 +55,13 @@ go mod tidy
 go run .
 ```
 
-The API runs on `http://localhost:8080` by default.
+The API runs on `http://localhost:8080` by default in local development. In production, use your deployed Vercel URL as the base URL.
 
 Health check:
 
 ```bash
 curl http://localhost:8080/health
+curl https://your-vercel-project.vercel.app/health
 ```
 
 ## Environment Variables
@@ -166,10 +167,10 @@ Create reservation request:
 }
 ```
 
-Use the JWT from login:
+Use the JWT from login. Replace `BASE_URL` with `http://localhost:8080` locally or your Vercel URL in production:
 
 ```bash
-curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8080/api/v1/reservations/my-reservations
+curl -H "Authorization: Bearer YOUR_TOKEN" "$BASE_URL/api/v1/reservations/my-reservations"
 ```
 
 ## Concurrency Rule
